@@ -11,11 +11,6 @@ namespace Thesis
 {
     public partial class login : System.Web.UI.Page
     {
-        public string pass;
-        public string hPass;
-        public string salt;
-        public string pKey;
-        public string sKey;
         public DataSet ds;
         protected void Page_Load(object sender, EventArgs e)
         {            
@@ -26,7 +21,7 @@ namespace Thesis
         
         protected void Button1_Click(object sender, EventArgs e)
         {
-            string check = HiddenField5.Value;
+            string check = HiddenField4.Value;
             if (check == "0")
             {
                 Label1.Text = "Username or Password can not be left blank";
@@ -35,7 +30,11 @@ namespace Thesis
             }
             else if(check == "1")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "client click", "alert('yo!')", true);
+                Session["name"] = TextBox1.Text;
+                Session["pKey"] = HiddenField2.Value;
+                Session["sKey"] = HiddenField3.Value;
+                Session["symKey2"] = HiddenField1.Value;
+                Response.Redirect("message.aspx");
             }
             else
             {
