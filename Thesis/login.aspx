@@ -8,7 +8,7 @@
 </head>
 <script src="src/sjcl.js"></script>
 <script type="text/javascript">
-    function check() {
+    function check() {      //Checks if username and password fields are empty or not
         var user = document.getElementById("<%=TextBox1.ClientID%>").value;
         var pas = document.getElementById("<%=TextBox2.ClientID%>").value;
         if (user.length > 0 && pas.length > 0) {
@@ -20,35 +20,34 @@
             
         }
     }
-    function pwHashCheck() {
+    function pwHashCheck() {        
         var temp = 0;
         var pass1 = document.getElementById("<%=TextBox2.ClientID%>").value;
-        <%for (int z = 0; z < this.ds.Tables[0].Rows.Count; z++) {%>
-        var salt1 = "<%=this.ds.Tables[0].Rows[z][3].ToString()%>";
-        var salt = sjcl.codec.base64.toBits(salt1);
-        var pHash1 = sjcl.codec.base64.fromBits(sjcl.misc.pbkdf2(pass1, salt, 1000, 256));
-        if (pHash1 == "<%=this.ds.Tables[0].Rows[z][2].ToString()%>") {
-            temp = 1;
-            var symKey2_1 = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass1)) + sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(salt1)));
-            var symKey2_2 = sjcl.codec.base64.fromBits(symKey2_1);
-            var symKey1_1 = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass1)) + salt1);
-            var symKey1_2 = sjcl.codec.base64.fromBits(symKey1_1);
-            document.getElementById("HiddenField1").value = symKey2_2;
-            var pKey_1 = "<%=this.ds.Tables[0].Rows[z][4].ToString()%>";
-            var pKey_2 = sjcl.codec.base64.toBits(pKey_1);
-            document.getElementById("HiddenField2").value = pKey_2;
-            var sKey_1 = "<%=this.ds.Tables[0].Rows[z][5].ToString()%>";
-            var sKey_2 = decodeURIComponent(sKey_1);
-            var sKey_3 = sjcl.decrypt(symKey1_2, sKey_2);
-            var sKey_4 = sjcl.codec.base64.toBits(sKey_3);
-            document.getElementById("HiddenField3").value = sKey_4;
-            alert("hey");
-        }   
+        <%for (int z = 0; z < this.ds.Tables[0].Rows.Count; z++) {%>  //Iterate through all the rows of user table
+            var salt1 = "<%=this.ds.Tables[0].Rows[z][3].ToString()%>";     //gets the salt value from database
+            var salt = sjcl.codec.base64.toBits(salt1);
+            var pHash1 = sjcl.codec.base64.fromBits(sjcl.misc.pbkdf2(pass1, salt, 1000, 256));
+            if (pHash1 == "<%=this.ds.Tables[0].Rows[z][2].ToString()%>") {     //compares the hash of password with the hash stored in database
+                temp = 1;       //if hash matches, retreives the keys and stores them in user's current session
+                var symKey2_1 = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass1)) + sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(salt1)));
+                var symKey2_2 = sjcl.codec.base64.fromBits(symKey2_1);
+                var symKey1_1 = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass1)) + salt1);
+                var symKey1_2 = sjcl.codec.base64.fromBits(symKey1_1);
+                document.getElementById("HiddenField1").value = symKey2_2;
+                var pKey_1 = "<%=this.ds.Tables[0].Rows[z][4].ToString()%>";
+                var pKey_2 = sjcl.codec.base64.toBits(pKey_1);
+                document.getElementById("HiddenField2").value = pKey_2;
+                var sKey_1 = "<%=this.ds.Tables[0].Rows[z][5].ToString()%>";
+                var sKey_2 = decodeURIComponent(sKey_1);
+                var sKey_3 = sjcl.decrypt(symKey1_2, sKey_2);
+                var sKey_4 = sjcl.codec.base64.toBits(sKey_3);
+                document.getElementById("HiddenField3").value = sKey_4;
+            }   
         <%}%>
-        if (temp == 1) {
+        if (temp == 1) {        //Everything is fine and moves forward with the code
             document.getElementById("HiddenField4").value = "1";
         }
-        else {
+        else {      //Either username or password is incorrect
             document.getElementById("HiddenField4").value = "2";
         }
     }

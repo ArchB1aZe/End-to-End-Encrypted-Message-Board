@@ -20,14 +20,14 @@ namespace Thesis
         
         protected void Button1_Click(object sender, EventArgs e)
         {
-            string check = HiddenField5.Value;
-            if (check == "0")
+            string check = HiddenField5.Value;      //Gets this value from javascript code
+            if (check == "0")       
             {
                 Label1.Text = "Username or Password can not be left blank";
                 Label1.BackColor = System.Drawing.Color.Red;
                 Label1.Visible = true;
             }
-            else
+            else        //If the username and password fields are non empty stores the values in database
             {
                 Label1.Visible = false;
                 string pubKey = HiddenField1.Value;

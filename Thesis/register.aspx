@@ -8,45 +8,45 @@
 </head>
 <script src="src/sjcl.js"></script>
 <script type="text/javascript">
-    function check() {
-        var user = document.getElementById("<%=TextBox1.ClientID%>").value;
+    function check() {      //Checks if the username and password fields are blank or not     
+        var user = document.getElementById("<%=TextBox1.ClientID%>").value;     
         var pas = document.getElementById("<%=TextBox2.ClientID%>").value;
-        if (user.length > 0 && pas.length > 0) {
+        if (user.length > 0 && pas.length > 0) {        //Fields are not empty so moves forward with the execution
             document.getElementById("HiddenField5").value = "1";
             pwHash();
         }
-        else {
+        else {      //one of the field is empty so breaks the execution
             document.getElementById("HiddenField5").value = "0"; 
         }
     }
     function pwHash(){          //For Hashing User's Password'     
         var pass = document.getElementById("<%=TextBox2.ClientID%>").value;
-        var salt = sjcl.random.randomWords(8);
-        var salt1 = sjcl.codec.base64.fromBits(salt);
-        var pHash = sjcl.misc.pbkdf2(pass, salt, 1000, 256);
-        var pHash1 = sjcl.codec.base64.fromBits(pHash);
+        var salt = sjcl.random.randomWords(8);      //Randomly generated salt
+        var salt1 = sjcl.codec.base64.fromBits(salt);       //Conversion of salt into Base64 format
+        var pHash = sjcl.misc.pbkdf2(pass, salt, 1000, 256);        //Generation of the user's password hash
+        var pHash1 = sjcl.codec.base64.fromBits(pHash);     //Conversion of hash into Base64 format
         document.getElementById("HiddenField3").value = pHash1;
         keyGenerate(pass, salt1);
     }
     function keyGenerate(pass, salt1) {         //To Generate the Pair of Keys         
         var pass = pass;
         var salt1 = salt1;
-        var pair = sjcl.ecc.elGamal.generateKeys(256);
+        var pair = sjcl.ecc.elGamal.generateKeys(256);      //Generation of public and private keys
         var pKey = pair.pub.get();
-        pKey = sjcl.codec.base64.fromBits(pKey.x.concat(pKey.y));
+        pKey = sjcl.codec.base64.fromBits(pKey.x.concat(pKey.y));       //Serialization of public key
         document.getElementById("HiddenField1").value = pKey;
         var sKey = pair.sec.get();
-        sKey = sjcl.codec.base64.fromBits(sKey);
+        sKey = sjcl.codec.base64.fromBits(sKey);        //Serialization of private key
         sKeyEncryption(sKey, pass, salt1);
     }
     function sKeyEncryption(sKey, pass, salt1) {          //To Encrypt the Private Key of the User
         var sKey = sKey;
         var pass = pass;
         var salt1 = salt1;
-        var symKey = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass)) + salt1);
+        var symKey = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass)) + salt1);        //Symmetric key to be used to encrypt the private key
         var symKey1 = sjcl.codec.base64.fromBits(symKey);
-        var encSecretKey = sjcl.encrypt(symKey1, sKey);
-        var encSecretKey1 = encodeURIComponent(encSecretKey);
+        var encSecretKey = sjcl.encrypt(symKey1, sKey);         //Encrypted secret key     
+        var encSecretKey1 = encodeURIComponent(encSecretKey);       //Encoding of secret key to hide special characters ({, ?, /, ...)
         document.getElementById("HiddenField2").value = encSecretKey1;
         document.getElementById("HiddenField4").value = salt1;
     }
