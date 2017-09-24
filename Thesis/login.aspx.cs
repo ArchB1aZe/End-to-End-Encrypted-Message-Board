@@ -34,7 +34,8 @@ namespace Thesis
                 Session["pKey"] = HiddenField2.Value;
                 Session["sKey"] = HiddenField3.Value;
                 Session["symKey2"] = HiddenField1.Value;
-                Response.Redirect("message.aspx");
+                Label1.Visible = false;
+                //Response.Redirect("message.aspx");
             }
             else
             {
