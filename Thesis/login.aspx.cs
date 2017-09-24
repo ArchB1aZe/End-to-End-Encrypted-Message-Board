@@ -30,12 +30,13 @@ namespace Thesis
             }
             else if(check == "1")
             {
+                Session["id"] = HiddenField5.Value;
                 Session["name"] = TextBox1.Text;
                 Session["pKey"] = HiddenField2.Value;
                 Session["sKey"] = HiddenField3.Value;
                 Session["symKey2"] = HiddenField1.Value;
                 Label1.Visible = false;
-                //Response.Redirect("message.aspx");
+                Response.Redirect("msgTest.aspx");
             }
             else
             {
