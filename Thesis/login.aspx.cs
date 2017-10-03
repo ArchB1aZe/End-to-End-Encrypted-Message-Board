@@ -34,9 +34,8 @@ namespace Thesis
                 Session["name"] = TextBox1.Text;
                 Session["pKey"] = HiddenField2.Value;
                 Session["sKey"] = HiddenField3.Value;
-                Session["symKey2"] = HiddenField1.Value;
                 Label1.Visible = false;
-                Response.Redirect("msgTest.aspx");
+                Response.Redirect("userHome.aspx");
             }
             else
             {

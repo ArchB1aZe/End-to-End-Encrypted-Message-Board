@@ -76,8 +76,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="login.aspx" />
+    <Content Include="opengroups.aspx" />
     <Content Include="register.aspx" />
     <Content Include="src\sjcl.js" />
+    <Content Include="userHome.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +90,13 @@
     <Compile Include="login.aspx.designer.cs">
       <DependentUpon>login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="opengroups.aspx.cs">
+      <DependentUpon>opengroups.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="opengroups.aspx.designer.cs">
+      <DependentUpon>opengroups.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="register.aspx.cs">
       <DependentUpon>register.aspx</DependentUpon>
@@ -95,6 +104,13 @@
     </Compile>
     <Compile Include="register.aspx.designer.cs">
       <DependentUpon>register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="userHome.aspx.cs">
+      <DependentUpon>userHome.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="userHome.aspx.designer.cs">
+      <DependentUpon>userHome.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <PropertyGroup>

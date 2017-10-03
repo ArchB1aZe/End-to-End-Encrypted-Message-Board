@@ -29,11 +29,8 @@
             var pHash1 = sjcl.codec.base64.fromBits(sjcl.misc.pbkdf2(pass1, salt, 1000, 256));
             if (pHash1 == "<%=this.ds.Tables[0].Rows[z][2].ToString()%>") {     //compares the hash of password with the hash stored in database
                 temp = 1;       //if hash matches, retreives the keys and stores them in user's current session
-                var symKey2_1 = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass1)) + sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(salt1)));     //Key used to encrypt the messages
-                var symKey2_2 = sjcl.codec.base64.fromBits(symKey2_1);
-                var symKey1_1 = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass1)) + salt1);        //Key used to encrypt the symmetric key
+                var symKey1_1 = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass1)) + salt1);        //Key used to encrypt the private key
                 var symKey1_2 = sjcl.codec.base64.fromBits(symKey1_1);
-                document.getElementById("HiddenField1").value = symKey2_2;
                 var pKey_1 = "<%=this.ds.Tables[0].Rows[z][4].ToString()%>";
                 var pKey_2 = sjcl.codec.base64.toBits(pKey_1);
                 document.getElementById("HiddenField2").value = pKey_2;
