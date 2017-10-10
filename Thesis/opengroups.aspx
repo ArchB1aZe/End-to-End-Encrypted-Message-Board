@@ -15,7 +15,7 @@
             <%for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {%>
             <tr>
-                <td><a href ="group.aspx"></a><%=ds.Tables[0].Rows[i][1].ToString()%></td>
+                <td><a href ="group.aspx"><%=ds.Tables[0].Rows[i][1].ToString()%></a></td>
             </tr>
             <%} %>
         </table>

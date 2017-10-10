@@ -40,7 +40,7 @@ namespace Thesis
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            Response.Redirect("creategroup.aspx");
+            Response.Redirect("create.aspx");
         }
 
         protected void Button2_Click(object sender, EventArgs e)
