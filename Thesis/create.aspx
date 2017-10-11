@@ -46,21 +46,21 @@
                 if (flag == 1) {
                     document.getElementById("HiddenField1").value = "1";
                 } else {
-                    
                     document.getElementById("HiddenField1").value = "2";
-                    $(function ReturnGid(callback) {
+                    function CreateGid() {
                         $.ajax({
                             type: 'POST',
                             url: 'create.aspx/CreateGroup',
+                            async: false,
                             data: JSON.stringify({ gname: grpName, type: type1 }),
                             contentType: 'application/json; charset=utf-8',
                             dataType: 'json',
-                            success: function (msg) {
-                                callback(msg);
+                            success: function (gid) {
+                                CreateGroupKey(gid.d);
                             }
                         });
-                    });
-                    
+                    }
+                    CreateGid();
                 }
             }
         
@@ -70,7 +70,7 @@
 
         }
         }
-        function CreateGroupKey() {
+        function CreateGroupKey(gid) {
             var grpName = document.getElementById("<%=TextBox1.ClientID%>").value;
             var userList = document.getElementById("<%=TextBox2.ClientID%>").value;
             var salt1_1 = sjcl.random.randomWords(8);      //Randomly generated salt
@@ -80,6 +80,7 @@
             var grpKey = sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(salt1_2 + salt2_2));
             document.getElementById("HiddenField2").value = grpKey; 
         }
+        
     </script>
 </head>
 <body>
