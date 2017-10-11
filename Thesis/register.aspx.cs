@@ -47,6 +47,7 @@ namespace Thesis
                 myCommand.Parameters.AddWithValue("@pKey", pubKey);
                 myCommand.Parameters.AddWithValue("@sKey", encSecKey);
                 myCommand.ExecuteNonQuery();
+                conn.Close();
                 Response.Redirect("login.aspx");
                
             }

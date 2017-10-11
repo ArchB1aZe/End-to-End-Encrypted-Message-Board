@@ -79,6 +79,7 @@
     <Content Include="login.aspx" />
     <Content Include="opengroups.aspx" />
     <Content Include="register.aspx" />
+    <Content Include="src\jquery-3.2.1.min.js" />
     <Content Include="src\sjcl.js" />
     <Content Include="userHome.aspx" />
     <Content Include="Web.config" />

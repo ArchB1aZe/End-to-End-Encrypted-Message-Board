@@ -1,5 +1,28 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="create.aspx.cs" Inherits="Thesis.create" %>
-
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Data.SqlClient" %>
+<%@ Import Namespace="System.Web.Services" %>
+<script src="src/jquery-3.2.1.min.js"></script>
+<script type="text/C#" runat="server">
+    [WebMethod]
+    public static int CreateGroup(string gname, string type)
+    {
+        SqlConnection conn = new SqlConnection();
+        conn.ConnectionString = "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true";
+        conn.Open();
+        string query = "INSERT INTO [group] (gname, type)";
+        query += " VALUES (@gname, @type)";
+        SqlCommand myCommand = new SqlCommand(query, conn);
+        myCommand.Parameters.AddWithValue("@gname", gname);
+        myCommand.Parameters.AddWithValue("@type", type);
+        myCommand.ExecuteNonQuery();
+        conn.Close();
+        SqlDataAdapter ad = new SqlDataAdapter("select gid from [group] where gname = '" + gname + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        DataSet ds1 = new DataSet();
+        ad.Fill(ds1);
+        return Convert.ToInt32(ds1.Tables[0].Rows[0][0]);
+    }
+</script>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -10,6 +33,7 @@
         
         function check() {      //Checks if GroupName exist or not
             var grpName = document.getElementById("<%=TextBox1.ClientID%>").value;
+            var type1 = document.getElementById("<%=DropDownList1.ClientID%>").value;
             var flag = 0;
             if (grpName.length > 0) {
             <%for (int i = 0; i < this.ds.Tables[0].Rows.Count; i++)
@@ -24,7 +48,19 @@
                 } else {
                     
                     document.getElementById("HiddenField1").value = "2";
-                    CreateGroup();
+                    $(function ReturnGid(callback) {
+                        $.ajax({
+                            type: 'POST',
+                            url: 'create.aspx/CreateGroup',
+                            data: JSON.stringify({ gname: grpName, type: type1 }),
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            success: function (msg) {
+                                callback(msg);
+                            }
+                        });
+                    });
+                    
                 }
             }
         
@@ -34,7 +70,7 @@
 
         }
         }
-        function CreateGroup() {
+        function CreateGroupKey() {
             var grpName = document.getElementById("<%=TextBox1.ClientID%>").value;
             var userList = document.getElementById("<%=TextBox2.ClientID%>").value;
             var salt1_1 = sjcl.random.randomWords(8);      //Randomly generated salt
@@ -52,7 +88,13 @@
             Group Name: <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
             <br />
             Add Members: <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox> 
-            <asp:HiddenField ID="HiddenField1" runat="server" />
+            <br />
+            Type:
+            <asp:DropDownList ID="DropDownList1" runat="server">
+                <asp:ListItem>Open</asp:ListItem>
+                <asp:ListItem Selected="True">Closed</asp:ListItem>
+            </asp:DropDownList>
+&nbsp;<asp:HiddenField ID="HiddenField1" runat="server" />
             <asp:HiddenField ID="HiddenField2" runat="server" />
             <br />
             <asp:Button ID="Button1" runat="server" Text="Create" OnClick="Button1_Click" OnClientClick="check()"/>
