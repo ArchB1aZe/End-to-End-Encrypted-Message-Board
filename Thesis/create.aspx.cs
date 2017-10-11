@@ -21,6 +21,7 @@ namespace Thesis
             }
             else
             {
+                HiddenField2.Value = Session["name"].ToString();
                 SqlDataAdapter ad = new SqlDataAdapter("select * from [group]", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
                 ds = new DataSet();
                 ad.Fill(ds);

@@ -22,6 +22,17 @@
         ad.Fill(ds1);
         return Convert.ToInt32(ds1.Tables[0].Rows[0][0]);
     }
+    [WebMethod]
+    public static string[] GetUserKeys(string[] userNames1)
+    {
+        for(int i=0; i<userNames1.Length; i++)
+        {
+            SqlDataAdapter ad = new SqlDataAdapter("select uid, pKey from [user] where username = '" + userNames1[i] + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+            DataSet ds2 = new DataSet();
+            ad.Fill(ds2);         
+        }
+        return userNames1;
+    }
 </script>
 <!DOCTYPE html>
 
@@ -47,6 +58,7 @@
                     document.getElementById("HiddenField1").value = "1";
                 } else {
                     document.getElementById("HiddenField1").value = "2";
+                    /*
                     function CreateGid() {
                         $.ajax({
                             type: 'POST',
@@ -60,7 +72,9 @@
                             }
                         });
                     }
-                    CreateGid();
+                    */
+                    //CreateGid();
+                    CreateGroupKey(1);
                 }
             }
         
@@ -71,6 +85,7 @@
         }
         }
         function CreateGroupKey(gid) {
+            var gid = gid;
             var grpName = document.getElementById("<%=TextBox1.ClientID%>").value;
             var userList = document.getElementById("<%=TextBox2.ClientID%>").value;
             var salt1_1 = sjcl.random.randomWords(8);      //Randomly generated salt
@@ -78,8 +93,31 @@
             var salt2_1 = sjcl.random.randomWords(8);      //Randomly generated salt
             var salt2_2 = sjcl.codec.base64.fromBits(salt2_1);
             var grpKey = sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(salt1_2 + salt2_2));
-            document.getElementById("HiddenField2").value = grpKey; 
+            CreateIDArray(gid, grpKey);
         }
+        function CreateIDArray(gid, grpKey) {
+            var gid = gid;
+            var grpKey = grpKey;
+            var userNames = document.getElementById("<%=TextBox2.ClientID%>").value;
+            var userNamesArray = userNames.split(',');
+            userNamesArray[userNamesArray.length] = document.getElementById("HiddenField2").value;
+            function CallGetUserKeys() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'create.aspx/GetUserKeys',
+                    async: false,
+                    data: JSON.stringify({ userNames1: userNamesArray }),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (gid11) {
+                        alert(gid11.d)
+                    }
+                });
+            }
+            CallGetUserKeys();
+        }
+        function UpdateGList(){}
+        function UpdateKey(){}
         
     </script>
 </head>
