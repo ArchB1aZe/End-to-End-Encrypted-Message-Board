@@ -23,15 +23,17 @@
         return Convert.ToInt32(ds1.Tables[0].Rows[0][0]);
     }
     [WebMethod]
-    public static string[] GetUserKeys(string[] userNames1)
+    public static Dictionary<string, string> GetUserKeys(string[] userNames1)
     {
+        Dictionary<string, string> uKeys = new Dictionary<string, string>();
         for(int i=0; i<userNames1.Length; i++)
         {
             SqlDataAdapter ad = new SqlDataAdapter("select uid, pKey from [user] where username = '" + userNames1[i] + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
             DataSet ds2 = new DataSet();
-            ad.Fill(ds2);         
+            ad.Fill(ds2);
+            uKeys.Add(ds2.Tables[0].Rows[0][0].ToString(), ds2.Tables[0].Rows[0][1].ToString());
         }
-        return userNames1;
+        return uKeys;
     }
 </script>
 <!DOCTYPE html>
@@ -99,8 +101,14 @@
             var gid = gid;
             var grpKey = grpKey;
             var userNames = document.getElementById("<%=TextBox2.ClientID%>").value;
-            var userNamesArray = userNames.split(',');
-            userNamesArray[userNamesArray.length] = document.getElementById("HiddenField2").value;
+            if (userNames === "") {
+                var userNamesArray = [document.getElementById("HiddenField2").value];
+            }
+            else {
+                var userNamesArray = userNames.split(',');
+                userNamesArray[userNamesArray.length] = document.getElementById("HiddenField2").value;
+            }
+            
             function CallGetUserKeys() {
                 $.ajax({
                     type: 'POST',
@@ -110,13 +118,21 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (gid11) {
-                        alert(gid11.d)
+                        UpdateGList(gid11.d, gid, grpKey);
                     }
                 });
             }
             CallGetUserKeys();
         }
-        function UpdateGList(){}
+        function UpdateGList(dic, gid, grpKey) {
+            var gid = gid;
+            var grpKey = grpKey;
+            var encUid = [];
+            for (i = 0; i < Object.keys(dic).length; i++) {
+                encUid.push(encodeURIComponent(sjcl.encrypt(grpKey, Object.keys(dic)[i]))); 
+            }
+            console.log(dic);
+        }
         function UpdateKey(){}
         
     </script>
