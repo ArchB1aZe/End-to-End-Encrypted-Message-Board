@@ -35,6 +35,23 @@
         }
         return uKeys;
     }
+    [WebMethod]
+    public static int EnterGlist(string[] userID, string gid1)
+    {
+        //SqlConnection conn = new SqlConnection();
+       // conn.ConnectionString = "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true";
+        //conn.Open();
+        //for(int i=0; i<userID.Length; i++) {
+            //string query = "INSERT INTO [glist] (gid, uid)";
+            //query += " VALUES (@gid, @uid)";
+            //SqlCommand myCommand = new SqlCommand(query, conn);
+            //myCommand.Parameters.AddWithValue("@gid", gid1);
+            //myCommand.Parameters.AddWithValue("@uid", userID[i]);
+           // myCommand.ExecuteNonQuery();
+       // }
+        //conn.Close();
+        return 1;
+    }
 </script>
 <!DOCTYPE html>
 
@@ -76,7 +93,7 @@
                     }
                     */
                     //CreateGid();
-                    CreateGroupKey(1);
+                    CreateGroupKey(2);
                 }
             }
         
@@ -131,9 +148,29 @@
             for (i = 0; i < Object.keys(dic).length; i++) {
                 encUid.push(encodeURIComponent(sjcl.encrypt(grpKey, Object.keys(dic)[i]))); 
             }
-            console.log(dic);
+            $.ajax({
+                type: 'POST',
+                url: 'create.aspx/EnterGlist',
+                async: false,
+                data: JSON.stringify({ userID: encUid, gid1: gid }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function () {
+                    UpdateKey(dic,gid,grpKey);
+                }
+            });
         }
-        function UpdateKey(){}
+        function UpdateKey(dic, gid, grpKey) {
+            var gid = gid;
+            var grpKey = grpKey;
+            var encGrpKey = [];
+            for (i = 0; i < Object.keys(dic).length; i++){
+                encGrpKey[i] = sjcl.encrypt(dic[Object.keys(dic)[i]], grpKey);
+            }
+            var sKey = "<%=this.sKey%>";
+            //console.log(sjcl.decrypt(sKey, encGrpKey[0]));
+            console.log(sKey);
+        }
         
     </script>
 </head>

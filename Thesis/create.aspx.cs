@@ -13,6 +13,7 @@ namespace Thesis
     public partial class create : System.Web.UI.Page
     {
         public DataSet ds;
+        public string sKey;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["id"] == null)
@@ -25,6 +26,7 @@ namespace Thesis
                 SqlDataAdapter ad = new SqlDataAdapter("select * from [group]", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
                 ds = new DataSet();
                 ad.Fill(ds);
+                sKey = Session["sKey"].ToString();
             }
         }
 

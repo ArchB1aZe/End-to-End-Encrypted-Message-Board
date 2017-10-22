@@ -32,12 +32,18 @@
                 var symKey1_1 = sjcl.hash.sha256.hash(sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(pass1)) + salt1);        //Key used to encrypt the private key
                 var symKey1_2 = sjcl.codec.base64.fromBits(symKey1_1);
                 var pKey_1 = "<%=this.ds.Tables[0].Rows[z][4].ToString()%>";
-                var pKey_2 = sjcl.codec.base64.toBits(pKey_1);
+                var pKey_2 = new sjcl.ecc.elGamal.publicKey(
+                    sjcl.ecc.curves.c256,
+                    sjcl.codec.base64.toBits(pKey_1)
+                )
                 document.getElementById("HiddenField2").value = pKey_2;
                 var sKey_1 = "<%=this.ds.Tables[0].Rows[z][5].ToString()%>";
                 var sKey_2 = decodeURIComponent(sKey_1);
                 var sKey_3 = sjcl.decrypt(symKey1_2, sKey_2);
-                var sKey_4 = sjcl.codec.base64.toBits(sKey_3);
+                var sKey_4 = new sjcl.ecc.elGamal.secretKey(
+                    sjcl.ecc.curves.c256,
+                    sjcl.ecc.curves.c256.field.fromBits(sjcl.codec.base64.toBits(sKey_3))
+                )
                 document.getElementById("HiddenField3").value = sKey_4;
                 document.getElementById("HiddenField5").value = "<%=ds.Tables[0].Rows[z][0].ToString()%>"; 
             }   
