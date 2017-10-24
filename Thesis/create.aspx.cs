@@ -14,6 +14,7 @@ namespace Thesis
     {
         public DataSet ds;
         public string sKey;
+        public string pKey;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["id"] == null)
@@ -27,6 +28,7 @@ namespace Thesis
                 ds = new DataSet();
                 ad.Fill(ds);
                 sKey = Session["sKey"].ToString();
+                pKey = Session["pKey"].ToString();
             }
         }
 

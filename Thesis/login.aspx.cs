@@ -14,9 +14,7 @@ namespace Thesis
         public DataSet ds;
         protected void Page_Load(object sender, EventArgs e)
         {            
-            SqlDataAdapter ad = new SqlDataAdapter("select * from [user]", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
-            ds = new DataSet();
-            ad.Fill(ds);
+           
         }
         
         protected void Button1_Click(object sender, EventArgs e)

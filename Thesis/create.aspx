@@ -165,11 +165,12 @@
             var grpKey = grpKey;
             var encGrpKey = [];
             for (i = 0; i < Object.keys(dic).length; i++){
-                encGrpKey[i] = sjcl.encrypt(dic[Object.keys(dic)[i]], grpKey);
+                var pKey_1 = new sjcl.ecc.elGamal.publicKey(
+                    sjcl.ecc.curves.c256,
+                    sjcl.codec.base64.toBits(dic[Object.keys(dic)[i]])
+                )
+                encGrpKey[i] = sjcl.encrypt(pKey_1, grpKey);
             }
-            var sKey = "<%=this.sKey%>";
-            //console.log(sjcl.decrypt(sKey, encGrpKey[0]));
-            console.log(sKey);
         }
         
     </script>
