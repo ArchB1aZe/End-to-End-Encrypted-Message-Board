@@ -36,20 +36,41 @@
         return uKeys;
     }
     [WebMethod]
-    public static int EnterGlist(string[] userID, string gid1)
+    public static int EnterGlist(string[] userID, string gid1, string[] type)
     {
-        //SqlConnection conn = new SqlConnection();
-       // conn.ConnectionString = "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true";
-        //conn.Open();
-        //for(int i=0; i<userID.Length; i++) {
-            //string query = "INSERT INTO [glist] (gid, uid)";
-            //query += " VALUES (@gid, @uid)";
-            //SqlCommand myCommand = new SqlCommand(query, conn);
-            //myCommand.Parameters.AddWithValue("@gid", gid1);
-            //myCommand.Parameters.AddWithValue("@uid", userID[i]);
-           // myCommand.ExecuteNonQuery();
-       // }
-        //conn.Close();
+        SqlConnection conn = new SqlConnection();
+        conn.ConnectionString = "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true";
+        conn.Open();
+        string query = "INSERT INTO [glist] (gid, uid, type)";
+        query += " VALUES (@gid, @uid, @type)";
+        for(int i=0; i<userID.Length; i++) {
+            SqlCommand myCommand = new SqlCommand(query, conn);
+            myCommand.Parameters.AddWithValue("@gid", gid1);
+            myCommand.Parameters.AddWithValue("@uid", userID[i]);
+            myCommand.Parameters.AddWithValue("@type", type[i]);
+            myCommand.ExecuteNonQuery();
+        }
+        conn.Close();
+        return 1;
+    }
+    [WebMethod]
+    public static int EnterKey(string gid, Dictionary<string, string> encGrpKey)
+    {
+        SqlConnection conn = new SqlConnection();
+        conn.ConnectionString = "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true";
+        conn.Open();
+        string query = "INSERT INTO [key] (gid, enckey, uid)";
+        query += " VALUES (@gid, @enckey, @uid)";
+        string[] keys = encGrpKey.Keys.ToArray();
+        for(int i=0; i<keys.Length; i++)
+        {
+            SqlCommand myCommand = new SqlCommand(query, conn);
+            myCommand.Parameters.AddWithValue("@gid", gid);
+            myCommand.Parameters.AddWithValue("@enckey", encGrpKey[keys[i]]);
+            myCommand.Parameters.AddWithValue("@uid", keys[i]);
+            myCommand.ExecuteNonQuery();
+        }
+        conn.Close();
         return 1;
     }
 </script>
@@ -77,7 +98,7 @@
                     document.getElementById("HiddenField1").value = "1";
                 } else {
                     document.getElementById("HiddenField1").value = "2";
-                    /*
+                    
                     function CreateGid() {
                         $.ajax({
                             type: 'POST',
@@ -91,9 +112,8 @@
                             }
                         });
                     }
-                    */
-                    //CreateGid();
-                    CreateGroupKey(2);
+                    
+                    CreateGid();
                 }
             }
         
@@ -144,15 +164,23 @@
         function UpdateGList(dic, gid, grpKey) {
             var gid = gid;
             var grpKey = grpKey;
+            var id = "<%=this.id%>";
             var encUid = [];
+            var type = [];
             for (i = 0; i < Object.keys(dic).length; i++) {
-                encUid.push(encodeURIComponent(sjcl.encrypt(grpKey, Object.keys(dic)[i]))); 
+                encUid[i] = (encodeURIComponent(sjcl.encrypt(grpKey, Object.keys(dic)[i])));
+                if (id == Object.keys(dic)[i]) {
+                    type[i] = "admin";
+                }
+                else {
+                    type[i] = "normal";
+                }
             }
             $.ajax({
                 type: 'POST',
                 url: 'create.aspx/EnterGlist',
                 async: false,
-                data: JSON.stringify({ userID: encUid, gid1: gid }),
+                data: JSON.stringify({ userID: encUid, gid1: gid, type: type }),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function () {
@@ -163,14 +191,25 @@
         function UpdateKey(dic, gid, grpKey) {
             var gid = gid;
             var grpKey = grpKey;
-            var encGrpKey = [];
+            var encGrpKey = {};
             for (i = 0; i < Object.keys(dic).length; i++){
                 var pKey_1 = new sjcl.ecc.elGamal.publicKey(
                     sjcl.ecc.curves.c256,
                     sjcl.codec.base64.toBits(dic[Object.keys(dic)[i]])
                 )
-                encGrpKey[i] = sjcl.encrypt(pKey_1, grpKey);
+                encGrpKey[Object.keys(dic)[i]] = encodeURIComponent(sjcl.encrypt(pKey_1, grpKey));
             }
+            $.ajax({
+                type: 'POST',
+                url: 'create.aspx/EnterKey',
+                async: false,
+                data: JSON.stringify({ gid: gid, encGrpKey: encGrpKey }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function () {
+                    console.log("Entered the keys successfully");
+                }
+            });
         }
         
     </script>
