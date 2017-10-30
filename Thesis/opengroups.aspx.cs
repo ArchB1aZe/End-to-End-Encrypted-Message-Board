@@ -20,7 +20,7 @@ namespace Thesis
             }
             else
             {
-                SqlDataAdapter ad = new SqlDataAdapter("select * from [group] where type = 'open'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+                SqlDataAdapter ad = new SqlDataAdapter("select * from [group]" , "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
                 ds = new DataSet();
                 ad.Fill(ds);
             }

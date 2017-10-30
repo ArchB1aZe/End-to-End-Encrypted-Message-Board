@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="create.aspx" />
+    <Content Include="Group.aspx" />
     <Content Include="login.aspx" />
     <Content Include="opengroups.aspx" />
     <Content Include="register.aspx" />
@@ -91,6 +92,13 @@
     </Compile>
     <Compile Include="create.aspx.designer.cs">
       <DependentUpon>create.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Group.aspx.cs">
+      <DependentUpon>Group.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Group.aspx.designer.cs">
+      <DependentUpon>Group.aspx</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>

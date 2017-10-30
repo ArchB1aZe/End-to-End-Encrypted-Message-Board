@@ -15,7 +15,7 @@
             <%for (int i = 0; i < this.gname.Count; i++)
                 { %>
             <tr>
-                <td><a href="group.aspx"><%=this.gname.ElementAt(i)%></a></td>
+                <td><a href="Group.aspx?groupName=<%=this.gname.ElementAt(i).ToString()%>"><%=this.gname.ElementAt(i)%></a></td>
             </tr>
             <%} %>
             <tr style="text-align:center">

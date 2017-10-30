@@ -32,6 +32,7 @@ namespace Thesis
 
         protected void Button1_Click(object sender, EventArgs e)
         {
+            string groupName = TextBox1.Text;
             string check = HiddenField1.Value;
             if (check == "0")
             {
@@ -48,6 +49,7 @@ namespace Thesis
             else
             {
                 Label1.Visible = false;
+                Response.Redirect("Group.aspx?groupName="+groupName+" ");
             }
         }
     }

@@ -11,11 +11,13 @@
         <table>
             <tr>
                 <th>Group Name</th>
+                <th>Type</th>
             </tr>
             <%for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {%>
             <tr>
-                <td><a href ="group.aspx"><%=ds.Tables[0].Rows[i][1].ToString()%></a></td>
+                <td><a href ="group.aspx?groupName=<%=ds.Tables[0].Rows[i][1].ToString()%>"><%=ds.Tables[0].Rows[i][1].ToString()%></a></td>
+                <td><%=ds.Tables[0].Rows[i][2].ToString()%></td>
             </tr>
             <%} %>
         </table>
