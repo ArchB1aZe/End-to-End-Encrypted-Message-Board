@@ -16,6 +16,7 @@
                 { %>
             <tr>
                 <td><a href="Group.aspx?groupName=<%=this.gname.ElementAt(i).ToString()%>"><%=this.gname.ElementAt(i)%></a></td>
+                <td><%=this.type.ElementAt(i)%></td>
             </tr>
             <%} %>
             <tr style="text-align:center">

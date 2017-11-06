@@ -16,6 +16,7 @@ namespace Thesis
         public string gname;
         public string uid;
         public int test=0;
+        public string sKey;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["id"] == null)
@@ -24,6 +25,7 @@ namespace Thesis
             }
             else
             {
+                sKey = Session["sKey"].ToString();
                 uid = Session["id"].ToString();
                 string groupName = gname = Request.QueryString["groupName"];
                 SqlDataAdapter ad = new SqlDataAdapter("select * from [group] where gname = '"+groupName+"'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
@@ -36,6 +38,12 @@ namespace Thesis
                 }
                 ClientScript.RegisterStartupScript(this.GetType(), "client click", "check()", true);
             }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            Session["grpKey"] = HiddenField1.Value;
+            //Response.Redirect("WriteMessage.aspx?gid=gid");
         }
     }
 }

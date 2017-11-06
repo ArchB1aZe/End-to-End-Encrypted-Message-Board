@@ -14,6 +14,7 @@ namespace Thesis
         public DataSet ds;
         public DataSet ds1;
         public List<string> gname = new List<string>();
+        public List<string> type = new List<string>();
         protected void Page_Load(object sender, EventArgs e)
         {
             if(Session["id"] == null)
@@ -29,10 +30,11 @@ namespace Thesis
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        SqlDataAdapter ad1 = new SqlDataAdapter("select gname from [group] where gid = '" + Convert.ToInt32(ds.Tables[0].Rows[i][0]) + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+                        SqlDataAdapter ad1 = new SqlDataAdapter("select * from [group] where gid = '" + Convert.ToInt32(ds.Tables[0].Rows[i][0]) + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
                         ds1 = new DataSet();
                         ad1.Fill(ds1);
-                        gname.Add(ds1.Tables[0].Rows[0][0].ToString());
+                        gname.Add(ds1.Tables[0].Rows[0][1].ToString());
+                        type.Add(ds1.Tables[0].Rows[0][2].ToString());
                     }
                 }
             }
