@@ -84,6 +84,7 @@
     <Content Include="src\sjcl.js" />
     <Content Include="userHome.aspx" />
     <Content Include="Web.config" />
+    <Content Include="WriteMessage.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="create.aspx.cs">
@@ -128,6 +129,13 @@
     </Compile>
     <Compile Include="userHome.aspx.designer.cs">
       <DependentUpon>userHome.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WriteMessage.aspx.cs">
+      <DependentUpon>WriteMessage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WriteMessage.aspx.designer.cs">
+      <DependentUpon>WriteMessage.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <PropertyGroup>

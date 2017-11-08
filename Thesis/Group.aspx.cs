@@ -43,7 +43,7 @@ namespace Thesis
         protected void Button1_Click(object sender, EventArgs e)
         {
             Session["grpKey"] = HiddenField1.Value;
-            //Response.Redirect("WriteMessage.aspx?gid=gid");
+            Response.Redirect("WriteMessage.aspx?gid="+gid+"&gname="+gname+"&test="+test+"");
         }
     }
 }

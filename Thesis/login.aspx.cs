@@ -41,5 +41,10 @@ namespace Thesis
                 Label1.Visible = true;
             }
         }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("register.aspx");
+        }
     }
 }
