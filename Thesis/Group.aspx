@@ -15,30 +15,41 @@
     }
 
     [WebMethod]
-    public static Dictionary<string, string> GetClosedMessages(string gid)
+    public static string[][] GetClosedMessages(string gid)
     {
-        Dictionary<string,  string> msgInfo = new Dictionary<string, string>();
-        SqlDataAdapter ad = new SqlDataAdapter("select * from [message] where gid = '" + gid + "' order by mid", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        string[][] msgInfo = new string[3][];
+        SqlDataAdapter ad = new SqlDataAdapter("select * from [message] where gid = '" + gid + "' order by mid DESC", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
         DataSet ds1 = new DataSet();
         ad.Fill(ds1);
+        msgInfo[0] = new string[ds1.Tables[0].Rows.Count];
+        msgInfo[1] = new string[ds1.Tables[0].Rows.Count];
+        msgInfo[2] = new string[ds1.Tables[0].Rows.Count];
         for(int i=0; i<ds1.Tables[0].Rows.Count; i++)
         {
-            msgInfo[ds1.Tables[0].Rows[i][1].ToString()] = ds1.Tables[0].Rows[i][2].ToString();
+            msgInfo[0][i] = ds1.Tables[0].Rows[i][1].ToString();
+            msgInfo[1][i] = ds1.Tables[0].Rows[i][2].ToString();
+            msgInfo[2][i] = ds1.Tables[0].Rows[i][4].ToString();
         }
         return msgInfo;
     }
     [WebMethod]
-    public static Dictionary<string, string> GetOpenMessages(string gid)
+    public static string[][] GetOpenMessages(string gid)
     {
-        Dictionary<string,  string> msgInfo = new Dictionary<string, string>();
-        SqlDataAdapter ad = new SqlDataAdapter("select * from [opengroup] where gid = '" + gid + "' order by mid", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        string[][] msgInfo = new string[3][];
+        SqlDataAdapter ad = new SqlDataAdapter("select * from [opengroup] where gid = '" + gid + "' order by mid DESC", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
         DataSet ds1 = new DataSet();
         ad.Fill(ds1);
+        msgInfo[0] = new string[ds1.Tables[0].Rows.Count];
+        msgInfo[1] = new string[ds1.Tables[0].Rows.Count];
+        msgInfo[2] = new string[ds1.Tables[0].Rows.Count];
         for(int i=0; i<ds1.Tables[0].Rows.Count; i++)
         {
-            msgInfo[ds1.Tables[0].Rows[i][1].ToString()] = ds1.Tables[0].Rows[i][2].ToString();
+            msgInfo[0][i] = ds1.Tables[0].Rows[i][1].ToString();
+            msgInfo[1][i] = ds1.Tables[0].Rows[i][2].ToString();
+            msgInfo[2][i] = ds1.Tables[0].Rows[i][4].ToString();
         }
         return msgInfo;
+        
     }
 </script>
 <!DOCTYPE html>
@@ -117,12 +128,11 @@
         }
         
         function DecryptMessages(encMessages, grpKey) {
-            var messages = {};
-            for (i = 0; i < Object.keys(encMessages).length; i++) {
-                var decryptedMessage = sjcl.decrypt(grpKey, decodeURIComponent(Object.keys(encMessages)[i]));
-                messages[decryptedMessage] = encMessages[Object.keys(encMessages)[i]];
+            for (i = 0; i < encMessages[0].length; i++) {
+                encMessages[0][i] = sjcl.decrypt(grpKey, decodeURIComponent(encMessages[0][i]));
+                encMessages[2][i] = sjcl.decrypt(grpKey, decodeURIComponent(encMessages[2][i]));
             }
-            DisplayMessages(messages);
+            DisplayMessages(encMessages);
         }
     }
 </script>
@@ -137,12 +147,20 @@
                     var head2 = row.insertCell(1);
                     head1.outerHTML = "<th>Author</th>";
                     head2.outerHTML = "<th>Message</th>";
-                    for (i = 0; i < Object.keys(messages).length; i++) {
-                        var row = table.insertRow(i+1);
-                        var cell1 = row.insertCell(0);
-                        var cell2 = row.insertCell(1);
-                        cell1.innerHTML = messages[Object.keys(messages)[i]];
-                        cell2.innerHTML = Object.keys(messages)[i];
+                    for (i = 0; i < messages[0].length; i++) {
+                        var row1 = table.insertRow(1);
+                        var row2 = table.insertRow(2);
+                        var cell1 = row1.insertCell(0);
+                        var cell2 = row1.insertCell(1);
+                        var cell3 = row2.insertCell(0);
+                        cell1.rowSpan = 2;
+                        var imga = decodeURIComponent(messages[2][i]); //Extracted image from database(in bytes)
+                        var srcString = "data:image / png;base64," + imga + "";
+                        var htmlString = '<img src="' + srcString + '">';
+                        cell1.innerHTML = messages[1][i];
+                        cell2.innerHTML = messages[0][i];
+                        cell3.innerHTML = htmlString;
+                        
                     }
                 }
             </script>

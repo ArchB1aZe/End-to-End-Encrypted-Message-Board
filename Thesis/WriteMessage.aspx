@@ -89,7 +89,7 @@
             var uid = "<%=this.uid%>";
             var gid = "<%=this.gid%>";
             var gname = "<%=this.gname%>";
-            var encImg = decodeURIComponent(img);
+            var encImg = encodeURIComponent(img);
             $.ajax({
                 type: 'POST',
                 url: 'WriteMessage.aspx/EnterDatabaseOpen',
