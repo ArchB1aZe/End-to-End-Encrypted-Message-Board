@@ -7,6 +7,7 @@
     [WebMethod]
     public static string GetGroupKey(string uid, string gid)
     {
+
         SqlDataAdapter ad = new SqlDataAdapter("select enckey from [key] where gid = '" + gid + "' and uid = '" + uid +"'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
         DataSet ds1 = new DataSet();
         ad.Fill(ds1);
@@ -17,7 +18,7 @@
     public static Dictionary<string, string> GetClosedMessages(string gid)
     {
         Dictionary<string,  string> msgInfo = new Dictionary<string, string>();
-        SqlDataAdapter ad = new SqlDataAdapter("select * from [message] where gid = '" + gid + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        SqlDataAdapter ad = new SqlDataAdapter("select * from [message] where gid = '" + gid + "' order by mid", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
         DataSet ds1 = new DataSet();
         ad.Fill(ds1);
         for(int i=0; i<ds1.Tables[0].Rows.Count; i++)
@@ -30,7 +31,7 @@
     public static Dictionary<string, string> GetOpenMessages(string gid)
     {
         Dictionary<string,  string> msgInfo = new Dictionary<string, string>();
-        SqlDataAdapter ad = new SqlDataAdapter("select * from [opengroup] where gid = '" + gid + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        SqlDataAdapter ad = new SqlDataAdapter("select * from [opengroup] where gid = '" + gid + "' order by mid", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
         DataSet ds1 = new DataSet();
         ad.Fill(ds1);
         for(int i=0; i<ds1.Tables[0].Rows.Count; i++)
@@ -65,11 +66,12 @@
     }
     function InvokeClosedGroup(gid) {
         var uid = "<%=this.uid%>";
+        
         $.ajax({
             type: 'POST',
             url: 'Group.aspx/GetGroupKey',
             async: false,
-            data: JSON.stringify({ uid: uid, gid: gid }),
+            data: JSON.stringify({ uid: uid, gid: gid}),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (enckey) {

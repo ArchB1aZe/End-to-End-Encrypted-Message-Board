@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -13,7 +14,9 @@ namespace Thesis
         public string grpKey;
         public string uid;
         public string test;
-        string gname;
+        public string gname;
+        public string img;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["id"] == null)
@@ -32,7 +35,18 @@ namespace Thesis
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Group.aspx?groupName="+gname+"");
+            if (FileUpload1.HasFile)
+            {
+                System.IO.Stream fs = FileUpload1.PostedFile.InputStream;
+                System.IO.BinaryReader br = new System.IO.BinaryReader(fs);
+                byte[] bytes = br.ReadBytes((Int32)fs.Length);
+                img = Convert.ToBase64String(bytes, 0, bytes.Length);
+            }
+            else
+            {
+                img = "random string";
+            }
+            ClientScript.RegisterStartupScript(this.GetType(), "client click", "Check()", true);
         }
     }
 }

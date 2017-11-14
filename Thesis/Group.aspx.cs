@@ -17,6 +17,7 @@ namespace Thesis
         public string uid;
         public int test=0;
         public string sKey;
+        public string img;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["id"] == null)
@@ -25,6 +26,7 @@ namespace Thesis
             }
             else
             {
+                
                 sKey = Session["sKey"].ToString();
                 uid = Session["id"].ToString();
                 string groupName = gname = Request.QueryString["groupName"];
