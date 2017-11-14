@@ -30,6 +30,13 @@
             msgInfo[1][i] = ds1.Tables[0].Rows[i][2].ToString();
             msgInfo[2][i] = ds1.Tables[0].Rows[i][4].ToString();
         }
+        for(int i=0; i<msgInfo[0].Length; i++)
+        {
+            SqlDataAdapter ad1 = new SqlDataAdapter("select username from [user] where uid = '" + msgInfo[1][i] + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+            DataSet ds2 = new DataSet();
+            ad1.Fill(ds2);
+            msgInfo[1][i] = ds2.Tables[0].Rows[0][0].ToString();
+        }
         return msgInfo;
     }
     [WebMethod]
@@ -48,8 +55,15 @@
             msgInfo[1][i] = ds1.Tables[0].Rows[i][2].ToString();
             msgInfo[2][i] = ds1.Tables[0].Rows[i][4].ToString();
         }
+        for(int i=0; i<msgInfo[0].Length; i++)
+        {
+            SqlDataAdapter ad1 = new SqlDataAdapter("select username from [user] where uid = '" + msgInfo[1][i] + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+            DataSet ds2 = new DataSet();
+            ad1.Fill(ds2);
+            msgInfo[1][i] = ds2.Tables[0].Rows[0][0].ToString();
+        }
         return msgInfo;
-        
+
     }
 </script>
 <!DOCTYPE html>

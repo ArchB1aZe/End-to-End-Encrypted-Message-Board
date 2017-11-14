@@ -111,6 +111,8 @@
             <asp:TextBox ID="TextBox1" runat="server" Height="291px" TextMode="MultiLine" Width="601px"></asp:TextBox>
             <br />
             
+            Upload Image(Max 2MB) :
+            
             <asp:FileUpload ID="FileUpload1" runat="server" />
             <asp:HiddenField ID="HiddenField1" runat="server" />
             
