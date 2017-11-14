@@ -156,10 +156,13 @@
                         cell1.rowSpan = 2;
                         var imga = decodeURIComponent(messages[2][i]); //Extracted image from database(in bytes)
                         var srcString = "data:image / png;base64," + imga + "";
-                        var htmlString = '<img src="' + srcString + '">';
+                        var htmlString = '<img src="' + srcString + '"width="400" height="400">';
                         cell1.innerHTML = messages[1][i];
                         cell2.innerHTML = messages[0][i];
-                        cell3.innerHTML = htmlString;
+                        if (imga != "random string") {
+                            cell3.innerHTML = htmlString;
+                        }
+                        
                         
                     }
                 }

@@ -39,7 +39,7 @@ namespace Thesis
             {
                 System.IO.Stream fs = FileUpload1.PostedFile.InputStream;
                 System.IO.BinaryReader br = new System.IO.BinaryReader(fs);
-                byte[] bytes = br.ReadBytes((Int32)fs.Length);
+                byte[] bytes = br.ReadBytes(Convert.ToInt32(fs.Length));
                 img = Convert.ToBase64String(bytes, 0, bytes.Length);
             }
             else
