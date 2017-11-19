@@ -11,6 +11,7 @@
         <table>
             <tr>
                 <th>Group Name</th>
+                <th>Type</th>
             </tr>
             <%for (int i = 0; i < this.gname.Count; i++)
                 { %>
@@ -22,6 +23,7 @@
             <tr style="text-align:center">
                 <td><asp:Button ID="Button1" runat="server" Text="Create New Group" OnClick="Button1_Click" /></td>
                 <td><asp:Button ID="Button2" runat="server" Text="See All Groups" OnClick="Button2_Click" /></td>
+                <td><asp:Button ID="Button3" runat="server" Text="See Join Requests" OnClick="Button3_Click" /></td>
             </tr>
         </table>
     </form>

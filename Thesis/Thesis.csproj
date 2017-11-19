@@ -77,6 +77,8 @@
   <ItemGroup>
     <Content Include="create.aspx" />
     <Content Include="Group.aspx" />
+    <Content Include="Intermediate.aspx" />
+    <Content Include="JoinRequests.aspx" />
     <Content Include="login.aspx" />
     <Content Include="opengroups.aspx" />
     <Content Include="register.aspx" />
@@ -100,6 +102,20 @@
     </Compile>
     <Compile Include="Group.aspx.designer.cs">
       <DependentUpon>Group.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Intermediate.aspx.cs">
+      <DependentUpon>Intermediate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Intermediate.aspx.designer.cs">
+      <DependentUpon>Intermediate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="JoinRequests.aspx.cs">
+      <DependentUpon>JoinRequests.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="JoinRequests.aspx.designer.cs">
+      <DependentUpon>JoinRequests.aspx</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>

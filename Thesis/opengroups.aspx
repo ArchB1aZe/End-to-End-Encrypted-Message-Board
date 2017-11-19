@@ -6,6 +6,11 @@
 <head runat="server">
     <title></title>
 </head>
+<script type="text/javascript">
+    function Subscribe(gid){
+        console.log(gid);
+    }
+</script>
 <body>
     <form id="form1" runat="server">
         <table>
@@ -16,17 +21,10 @@
             <%for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {%>
             <tr>
-                <%if (this.ds.Tables[0].Rows[i][2].ToString() == "Closed")
-                    { %>
-                <td><%=ds.Tables[0].Rows[i][1].ToString()%></></td>
+                
+                <td><a href ="Intermediate.aspx?groupName=<%=ds.Tables[0].Rows[i][1].ToString()%>"><%=ds.Tables[0].Rows[i][1].ToString()%></a></td>
                 <td><%=ds.Tables[0].Rows[i][2].ToString()%></td>
                 
-                <%}
-    else
-    { %>
-                <td><a href ="group.aspx?groupName=<%=ds.Tables[0].Rows[i][1].ToString()%>"><%=ds.Tables[0].Rows[i][1].ToString()%></a></td>
-                <td><%=ds.Tables[0].Rows[i][2].ToString()%></td>
-                <%} %>
             </tr>
             <%} %>
         </table>
