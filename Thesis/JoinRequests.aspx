@@ -168,12 +168,12 @@
         return 1;
     }
     [WebMethod]
-    public static Dictionary<string, string> GetMessages(string gidAcc)
+    public static Array[] GetMessages(string gidAcc)
     {
         List<string> mid = new List<string>();
         List<string> encryptedMessages = new List<string>();
         List<string> img = new List<string>();
-        //Here define the array which holds all above lists and then pass this array down there for the messagessss
+        Array[] message = new Array[3];
         SqlDataAdapter ad = new SqlDataAdapter("select mid, encm, img from [message] where gid = '" + gidAcc + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
         DataSet ds2 = new DataSet();
         ad.Fill(ds2);
@@ -183,7 +183,29 @@
             encryptedMessages.Add(ds2.Tables[0].Rows[i][1].ToString());
             img.Add(ds2.Tables[0].Rows[i][2].ToString());
         }
-        return pKeyDict;
+        message[0] = mid.ToArray<string>();
+        message[1] = encryptedMessages.ToArray<string>();
+        message[2] = img.ToArray<string>();
+        return message;
+    }
+    [WebMethod]
+    public static int UpdateMessages(string[] mid, string[] encMessage, string[] encImage)
+    {
+        SqlConnection conn = new SqlConnection();
+        conn.ConnectionString = "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true";
+        conn.Open();
+        for(int i=0; i<mid.Length; i++)
+        {
+            string query = "UPDATE [message] SET encm = @encm, img = @img Where mid = @mid";
+            SqlCommand myCommand = new SqlCommand(query, conn);
+            myCommand.Parameters.AddWithValue("@encm", encMessage[i]);
+            myCommand.Parameters.AddWithValue("@img", encImage[i]);
+            myCommand.Parameters.AddWithValue("@mid", mid[i]);
+            myCommand.ExecuteNonQuery();
+        }
+        conn.Close();
+        
+        return 1;
     }
 </script>
 <!DOCTYPE html>
@@ -394,11 +416,11 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (abc) {
-                GetPublicKey(oldGroupKey, newGroupKey, idArray_1, gidAcc)
+                GetPublicKey(oldGroupKey, newGroupKey, idArray_1, gidAcc, uidAcc)
             }
         });
     }
-    function GetPublicKey(oldGroupKey, newGroupKey, idArray, gidAcc) {
+    function GetPublicKey(oldGroupKey, newGroupKey, idArray, gidAcc, uidAcc) {
         $.ajax({
             type: 'POST',
             url: 'JoinRequests.aspx/GetPublicKeyArray',
@@ -407,11 +429,11 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (pKeys) {
-                UpdateKey(pKeys.d, oldGroupKey, newGroupKey, gidAcc)
+                UpdateKey(pKeys.d, oldGroupKey, newGroupKey, gidAcc, uidAcc)
             }
         });
     }
-    function UpdateKey(pKeysDict, oldGroupKey, newGroupKey, gidAcc) {
+    function UpdateKey(pKeysDict, oldGroupKey, newGroupKey, gidAcc, uidAcc) {
         var groupKeyArray = [];
         var uidArray = [];
         for (i = 0; i < Object.keys(pKeysDict).length; i++) {
@@ -430,11 +452,11 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (xyz) {
-                GetGroupMessages(gidAcc, oldGroupKey, newGroupKey);
+                GetGroupMessages(gidAcc, oldGroupKey, newGroupKey, uidAcc);
             }
         });
     }
-    function GetGroupMessages(gidAcc, oldGroupKey, newGroupKey) {
+    function GetGroupMessages(gidAcc, oldGroupKey, newGroupKey, uidAcc) {
         $.ajax({
             type: 'POST',
             url: 'JoinRequests.aspx/GetMessages',
@@ -443,7 +465,30 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (messages) {
-                console.log(mesages.d);
+                ReEncryptMessages(messages.d, oldGroupKey, newGroupKey, uidAcc, gidAcc);
+            }
+        });
+    }
+    function ReEncryptMessages(messagesArray, oldGroupKey, newGroupKey, uidAcc, gidAcc) {
+        for (i = 0; i < messagesArray[0].length; i++) {
+            messagesArray[1][i] = sjcl.decrypt(oldGroupKey, decodeURIComponent(messagesArray[1][i]));
+            messagesArray[2][i] = sjcl.decrypt(oldGroupKey, decodeURIComponent(messagesArray[2][i]));
+            
+        }
+        for (j = 0; j < messagesArray[0].length; j++){
+            messagesArray[1][j] = encodeURIComponent(sjcl.encrypt(newGroupKey, messagesArray[1][j]));
+            messagesArray[2][j] = encodeURIComponent(sjcl.encrypt(newGroupKey, messagesArray[2][j]));
+            
+        }
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/UpdateMessages',
+            async: false,
+            data: JSON.stringify({ mid: messagesArray[0], encMessage: messagesArray[1], encImage: messagesArray[2] }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (messages) {
+                Reject(uidAcc, gidAcc);
             }
         });
     }
