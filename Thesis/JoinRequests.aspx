@@ -173,7 +173,7 @@
         List<string> mid = new List<string>();
         List<string> encryptedMessages = new List<string>();
         List<string> img = new List<string>();
-        //Here define the array which holds all above lists and then pass this array down there for the messages
+        //Here define the array which holds all above lists and then pass this array down there for the messagessss
         SqlDataAdapter ad = new SqlDataAdapter("select mid, encm, img from [message] where gid = '" + gidAcc + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
         DataSet ds2 = new DataSet();
         ad.Fill(ds2);
