@@ -13,7 +13,7 @@
         ad.Fill(ds2);
         for(int i=0; i<ds2.Tables[0].Rows.Count; i++)
         {
-            uKeys.Add(ds2.Tables[0].Rows[i][0].ToString(), ds2.Tables[0].Rows[i][1].ToString());
+            uKeys.Add(ds2.Tables[0].Rows[i][1].ToString(), ds2.Tables[0].Rows[i][0].ToString());
         }
 
         return uKeys;
@@ -53,10 +53,10 @@
                         gids.Add(ds2.Tables[0].Rows[j][0].ToString());
                         uids.Add(ds2.Tables[0].Rows[j][1].ToString());
                     }
-                     tempGid = Convert.ToInt32(gidList[i]);
+                    tempGid = Convert.ToInt32(gidList[i]);
                 }
 
-                   
+
             }
         }
         holder[0] = gids.ToArray<string>();
@@ -87,11 +87,103 @@
     [WebMethod]
     public static int DeleteRequest(string uidDel, string gidDel)
     {
-        
+
         SqlDataAdapter ad = new SqlDataAdapter("delete from [request] where gid = '" + gidDel + "' and uidr = '"+uidDel+"'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
         DataSet ds2 = new DataSet();
         ad.Fill(ds2);
         return 1;
+    }
+    [WebMethod]
+    public static Dictionary<string, string> GetGlist(string gidAcc)
+    {
+        Dictionary<string, string> gList = new Dictionary<string, string>();
+        SqlDataAdapter ad = new SqlDataAdapter("select * from [glist] where gid = '" + gidAcc +"'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        DataSet ds2 = new DataSet();
+        ad.Fill(ds2);
+        for(int i=0; i<ds2.Tables[0].Rows.Count; i++)
+        {
+            gList.Add(ds2.Tables[0].Rows[i][1].ToString(), ds2.Tables[0].Rows[i][2].ToString());
+        }
+        SqlDataAdapter ad1 = new SqlDataAdapter("delete from [glist] where gid = '" + gidAcc +"'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        DataSet ds1 = new DataSet();
+        ad1.Fill(ds1);
+        return gList;
+    }
+    [WebMethod]
+    public static int UpdateGlist(string[] idArray, string[] typeArray, string gidAcc)
+    {
+
+        SqlConnection conn = new SqlConnection();
+        conn.ConnectionString = "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true";
+        conn.Open();
+        for(int i=0; i<idArray.Length; i++)
+        {
+            string query = "INSERT INTO [glist] (gid, uid, type)";
+            query += " VALUES (@gid, @uid, @type)";
+            SqlCommand myCommand = new SqlCommand(query, conn);
+            myCommand.Parameters.AddWithValue("@gid", gidAcc);
+            myCommand.Parameters.AddWithValue("@uid", idArray[i]);
+            myCommand.Parameters.AddWithValue("@type", typeArray[i]);
+            myCommand.ExecuteNonQuery();
+        }
+        conn.Close();
+
+        return 1;
+    }
+    [WebMethod]
+    public static Dictionary<string, string> GetPublicKeyArray(string[] idArray)
+    {
+        Dictionary<string, string> pKeyDict = new Dictionary<string, string>();
+        for(int i=0; i<idArray.Length; i++)
+        {
+            SqlDataAdapter ad = new SqlDataAdapter("select uid, pKey from [user] where uid = '" + idArray[i] + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+            DataSet ds2 = new DataSet();
+            ad.Fill(ds2);
+            pKeyDict.Add(ds2.Tables[0].Rows[0][0].ToString(), ds2.Tables[0].Rows[0][1].ToString());
+        }
+
+        return pKeyDict;
+    }
+    [WebMethod]
+    public static int EnterPublicKeys(string[] groupKeyArray, string gidAcc, string[] uidArray)
+    {
+        SqlDataAdapter ad = new SqlDataAdapter("delete from [key] where gid = '" + gidAcc + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        DataSet ds2 = new DataSet();
+        ad.Fill(ds2);
+        SqlConnection conn = new SqlConnection();
+        conn.ConnectionString = "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true";
+        conn.Open();
+        for(int i=0; i<groupKeyArray.Length; i++)
+        {
+            string query = "INSERT INTO [key] (gid, enckey, uid)";
+            query += " VALUES (@gid, @enckey, @uid)";
+            SqlCommand myCommand = new SqlCommand(query, conn);
+            myCommand.Parameters.AddWithValue("@gid", gidAcc);
+            myCommand.Parameters.AddWithValue("@enckey", groupKeyArray[i]);
+            myCommand.Parameters.AddWithValue("@uid", uidArray[i]);
+            myCommand.ExecuteNonQuery();
+        }
+        conn.Close();
+
+        return 1;
+    }
+    [WebMethod]
+    public static Dictionary<string, string> GetMessages(string gidAcc)
+    {
+        List<string> mid = new List<string>();
+        List<string> encryptedMessages = new List<string>();
+        List<string> img = new List<string>();
+        //Here define the array which holds all above lists and then pass this array down there for the messages
+        SqlDataAdapter ad = new SqlDataAdapter("select mid, encm, img from [message] where gid = '" + gidAcc + "'", "Data source = DESKTOP-LAR7HDI; Database = Thesis; Integrated Security = true");
+        DataSet ds2 = new DataSet();
+        ad.Fill(ds2);
+        for(int i=0; i < ds2.Tables[0].Rows.Count; i++)
+        {
+            mid.Add(ds2.Tables[0].Rows[i][0].ToString());
+            encryptedMessages.Add(ds2.Tables[0].Rows[i][1].ToString());
+            img.Add(ds2.Tables[0].Rows[i][2].ToString());
+        }
+        return pKeyDict;
     }
 </script>
 <!DOCTYPE html>
@@ -120,7 +212,7 @@
         var keysDict = keysDict;
         var gids = [];
         for (i = 0; i < Object.keys(keysDict).length; i++) {
-            gids[i] = Object.keys(keysDict)[i];
+            gids[i] = keysDict[Object.keys(keysDict)[i]];
         }
         $.ajax({
             type: 'POST',
@@ -146,11 +238,11 @@
         temp = 0;
         for (i = 0; i < Object.keys(uidsDict).length; i++) {
             for (j = 0; j < Object.keys(keysDict).length; j++) {
-                if (uidsDict[Object.keys(uidsDict)[i]] == Object.keys(keysDict)[j]) {
-                    var grpKey = sjcl.decrypt(sKey_2, decodeURIComponent(keysDict[Object.keys(keysDict)[j]]));
+                if (uidsDict[Object.keys(uidsDict)[i]] == keysDict[Object.keys(keysDict)[j]]) {
+                    var grpKey = sjcl.decrypt(sKey_2, decodeURIComponent(Object.keys(keysDict)[j]));
                     id = sjcl.decrypt(grpKey, decodeURIComponent(Object.keys(uidsDict)[i]));
                     if (id == uid) {
-                        gidList[temp] = Object.keys(keysDict)[j];
+                        gidList[temp] = keysDict[Object.keys(keysDict)[j]];
                         temp++;
                     }
                 }
@@ -230,8 +322,19 @@
 </body>
 <script type="text/javascript">
     function Accept(uidAcc, gidAcc) {
-        console.log(uidAcc + " " + gidAcc);
-        //implement this!!!!!!
+        var uid = "<%=this.uid%>";
+        //Get the group key
+        $.ajax({
+            type: 'POST',
+            url: 'Group.aspx/GetGroupKey',
+            async: false,
+            data: JSON.stringify({ uid: uid, gid: gidAcc }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (key) {
+                DecryptTheGroupKey(decodeURIComponent(key.d), gidAcc, uidAcc);
+            }
+        });
     }
     function Reject(uidDel, gidDel) {
         $.ajax({
@@ -243,6 +346,104 @@
             dataType: 'json',
             success: function (holder) {
                 GetKeys();
+            }
+        });
+    }
+    function DecryptTheGroupKey(key, gidAcc, uidAcc) {
+        var sKey_1 = "<%=this.sKey%>";
+        var sKey_2 = new sjcl.ecc.elGamal.secretKey(
+            sjcl.ecc.curves.c256,
+            sjcl.ecc.curves.c256.field.fromBits(sjcl.codec.base64.toBits(sKey_1))
+        )
+        var oldGroupKey = sjcl.decrypt(sKey_2, key);
+        var salt1_1 = sjcl.random.randomWords(8);      //Randomly generated salt
+        var salt1_2 = sjcl.codec.base64.fromBits(salt1_1);
+        var salt2_1 = sjcl.random.randomWords(8);      //Randomly generated salt
+        var salt2_2 = sjcl.codec.base64.fromBits(salt2_1);
+        var newGroupKey = sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(salt1_2 + salt2_2));
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/GetGlist',
+            async: false,
+            data: JSON.stringify({ gidAcc: gidAcc }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (dictGlist) {
+                EncryptGlist(dictGlist.d, oldGroupKey, newGroupKey, uidAcc, gidAcc)
+            }
+        });
+    }
+    function EncryptGlist(dictGlist, oldGroupKey, newGroupKey, uidAcc, gidAcc) {
+        var idArray_1 = [];
+        var idArray_2 = [];
+        var typeArray = [];
+        for (i = 0; i < Object.keys(dictGlist).length; i++){
+            idArray_1[i] = sjcl.decrypt(oldGroupKey, decodeURIComponent(Object.keys(dictGlist)[i]));
+            typeArray[i] = dictGlist[Object.keys(dictGlist)[i]];
+        }
+        idArray_1[idArray_1.length] = uidAcc;
+        typeArray[typeArray.length] = "normal";
+        for (i= 0; i < idArray_1.length; i++){
+            idArray_2[i] = encodeURIComponent(sjcl.encrypt(newGroupKey, idArray_1[i]));
+        }
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/UpdateGlist',
+            async: false,
+            data: JSON.stringify({ idArray: idArray_2, typeArray: typeArray, gidAcc: gidAcc }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (abc) {
+                GetPublicKey(oldGroupKey, newGroupKey, idArray_1, gidAcc)
+            }
+        });
+    }
+    function GetPublicKey(oldGroupKey, newGroupKey, idArray, gidAcc) {
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/GetPublicKeyArray',
+            async: false,
+            data: JSON.stringify({ idArray: idArray }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (pKeys) {
+                UpdateKey(pKeys.d, oldGroupKey, newGroupKey, gidAcc)
+            }
+        });
+    }
+    function UpdateKey(pKeysDict, oldGroupKey, newGroupKey, gidAcc) {
+        var groupKeyArray = [];
+        var uidArray = [];
+        for (i = 0; i < Object.keys(pKeysDict).length; i++) {
+            var pKey_1 = new sjcl.ecc.elGamal.publicKey(
+                sjcl.ecc.curves.c256,
+                sjcl.codec.base64.toBits(pKeysDict[Object.keys(pKeysDict)[i]])
+            )
+            groupKeyArray[i] = encodeURIComponent(sjcl.encrypt(pKey_1, newGroupKey));
+            uidArray[i] = Object.keys(pKeysDict)[i];
+        }
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/EnterPublicKeys',
+            async: false,
+            data: JSON.stringify({ groupKeyArray: groupKeyArray, gidAcc: gidAcc, uidArray: uidArray }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (xyz) {
+                GetGroupMessages(gidAcc, oldGroupKey, newGroupKey);
+            }
+        });
+    }
+    function GetGroupMessages(gidAcc, oldGroupKey, newGroupKey) {
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/GetMessages',
+            async: false,
+            data: JSON.stringify({ gidAcc: gidAcc }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (messages) {
+                console.log(mesages.d);
             }
         });
     }
