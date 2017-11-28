@@ -13,17 +13,18 @@ namespace Thesis
     {
         public DataSet ds;
         protected void Page_Load(object sender, EventArgs e)
-        {            
-           
+        {
+            
         }
         
         protected void Button1_Click(object sender, EventArgs e)
         {
+          
             string check = HiddenField4.Value;
             if (check == "0")
             {
                 Label1.Text = "Username or Password can not be left blank";
-                Label1.BackColor = System.Drawing.Color.Red;
+                Label1.ForeColor = System.Drawing.Color.Red;
                 Label1.Visible = true;
             }
             else if(check == "1")
@@ -38,6 +39,7 @@ namespace Thesis
             else
             {
                 Label1.Text = "Invalid Username or Password";
+                Label1.ForeColor = System.Drawing.Color.Red;
                 Label1.Visible = true;
             }
         }

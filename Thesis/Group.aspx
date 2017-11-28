@@ -182,11 +182,36 @@
                 }
             </script>
             <tr>
-                <td colspan="2">
+                <td>
                     <asp:Button ID="Button1" runat="server" Text="Write" OnClick="Button1_Click" /></td>
+                <td>
+                    <asp:Button ID="Button2" runat="server" Text="LeaveGroup" OnClientClick="RemoveUser()" OnClick="Button2_Click" /></td>
+                
             </tr>
         </table>
         <asp:HiddenField ID="HiddenField1" runat="server" />
     </form>
 </body>
+<script type="text/javascript">
+    function RemoveUser() {
+        var oldGrpKey = document.getElementById("HiddenField1").value;
+        var salt1_1 = sjcl.random.randomWords(8);      //Randomly generated salt
+        var salt1_2 = sjcl.codec.base64.fromBits(salt1_1);
+        var salt2_1 = sjcl.random.randomWords(8);      //Randomly generated salt
+        var salt2_2 = sjcl.codec.base64.fromBits(salt2_1);
+        var newGroupKey = sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(salt1_2 + salt2_2));
+        var gid = "<%=this.gid%>";
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/GetGlist',
+            async: false,
+            data: JSON.stringify({ gidAcc: gidAcc }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (dictGlist) {
+                EncryptGlist(dictGlist.d, oldGroupKey, newGroupKey, uidAcc, gidAcc)
+            }
+        });
+    }
+</script>
 </html>

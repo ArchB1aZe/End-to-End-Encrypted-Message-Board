@@ -18,6 +18,7 @@ namespace Thesis
         public int test=0;
         public string sKey;
         public string img;
+        public string tmpGrpKey;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["id"] == null)
@@ -46,6 +47,11 @@ namespace Thesis
         {
             Session["grpKey"] = HiddenField1.Value;
             Response.Redirect("WriteMessage.aspx?gid="+gid+"&gname="+gname+"&test="+test+"");
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            //Response.Redirect("userHome.aspx");
         }
     }
 }
