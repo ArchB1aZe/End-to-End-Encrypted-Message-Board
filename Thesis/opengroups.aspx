@@ -2,15 +2,13 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head runat="server">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="utf-8"/>
     <title></title>
 </head>
-<script type="text/javascript">
-    function Subscribe(gid){
-        console.log(gid);
-    }
-</script>
+
 <body>
     <form id="form1" runat="server">
         <table>

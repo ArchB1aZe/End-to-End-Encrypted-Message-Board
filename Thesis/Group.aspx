@@ -68,9 +68,11 @@
 </script>
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head runat="server">
+    <meta charset="utf-8"/>
     <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
     <script src="src/sjcl.js"></script>
 <script type="text/javascript">
@@ -194,13 +196,13 @@
 </body>
 <script type="text/javascript">
     function RemoveUser() {
-        var oldGrpKey = document.getElementById("HiddenField1").value;
+        var oldGroupKey = document.getElementById("HiddenField1").value;
         var salt1_1 = sjcl.random.randomWords(8);      //Randomly generated salt
         var salt1_2 = sjcl.codec.base64.fromBits(salt1_1);
         var salt2_1 = sjcl.random.randomWords(8);      //Randomly generated salt
         var salt2_2 = sjcl.codec.base64.fromBits(salt2_1);
         var newGroupKey = sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(salt1_2 + salt2_2));
-        var gid = "<%=this.gid%>";
+        var gidAcc = "<%=this.gid%>";
         $.ajax({
             type: 'POST',
             url: 'JoinRequests.aspx/GetGlist',
@@ -209,7 +211,107 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (dictGlist) {
-                EncryptGlist(dictGlist.d, oldGroupKey, newGroupKey, uidAcc, gidAcc)
+                EncryptGlist(dictGlist.d, oldGroupKey, newGroupKey, gidAcc);
+            }
+        });
+    }
+    function EncryptGlist(dictGlist, oldGroupKey, newGroupKey, gidAcc) {
+        var idArray_1 = [];
+        var idArray_2 = [];
+        var typeArray = [];
+        var uid = "<%=this.uid%>";
+        var tmp = 0;
+        for (i = 0; i < Object.keys(dictGlist).length; i++) {
+            if (sjcl.decrypt(oldGroupKey, decodeURIComponent(Object.keys(dictGlist)[i])) != uid) {
+                idArray_1[tmp] = sjcl.decrypt(oldGroupKey, decodeURIComponent(Object.keys(dictGlist)[i]));
+                typeArray[tmp] = dictGlist[Object.keys(dictGlist)[i]];
+                tmp++;
+            }           
+        }
+        for (i = 0; i < idArray_1.length; i++) {
+            idArray_2[i] = encodeURIComponent(sjcl.encrypt(newGroupKey, idArray_1[i]));
+        }
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/UpdateGlist',
+            async: false,
+            data: JSON.stringify({ idArray: idArray_2, typeArray: typeArray, gidAcc: gidAcc }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (abc) {
+                GetPublicKey(oldGroupKey, newGroupKey, idArray_1, gidAcc, uid);
+            }
+        });
+    }
+    function GetPublicKey(oldGroupKey, newGroupKey, idArray, gidAcc, uid) {
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/GetPublicKeyArray',
+            async: false,
+            data: JSON.stringify({ idArray: idArray }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (pKeys) {
+                UpdateKey(pKeys.d, oldGroupKey, newGroupKey, gidAcc, uid)
+            }
+        });
+    }
+    function UpdateKey(pKeysDict, oldGroupKey, newGroupKey, gidAcc, uid) {
+        var groupKeyArray = [];
+        var uidArray = [];
+        for (i = 0; i < Object.keys(pKeysDict).length; i++) {
+            var pKey_1 = new sjcl.ecc.elGamal.publicKey(
+                sjcl.ecc.curves.c256,
+                sjcl.codec.base64.toBits(pKeysDict[Object.keys(pKeysDict)[i]])
+            )
+            groupKeyArray[i] = encodeURIComponent(sjcl.encrypt(pKey_1, newGroupKey));
+            uidArray[i] = Object.keys(pKeysDict)[i];
+        }
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/EnterPublicKeys',
+            async: false,
+            data: JSON.stringify({ groupKeyArray: groupKeyArray, gidAcc: gidAcc, uidArray: uidArray }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (xyz) {
+                GetGroupMessages(gidAcc, oldGroupKey, newGroupKey, uid);
+            }
+        });
+    }
+    function GetGroupMessages(gidAcc, oldGroupKey, newGroupKey, uid) {
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/GetMessages',
+            async: false,
+            data: JSON.stringify({ gidAcc: gidAcc }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (messages) {
+                ReEncryptMessages(messages.d, oldGroupKey, newGroupKey, uid, gidAcc);
+            }
+        });
+    }
+    function ReEncryptMessages(messagesArray, oldGroupKey, newGroupKey, uid, gidAcc) {
+        for (i = 0; i < messagesArray[0].length; i++) {
+            messagesArray[1][i] = sjcl.decrypt(oldGroupKey, decodeURIComponent(messagesArray[1][i]));
+            messagesArray[2][i] = sjcl.decrypt(oldGroupKey, decodeURIComponent(messagesArray[2][i]));
+
+        }
+        for (j = 0; j < messagesArray[0].length; j++) {
+            messagesArray[1][j] = encodeURIComponent(sjcl.encrypt(newGroupKey, messagesArray[1][j]));
+            messagesArray[2][j] = encodeURIComponent(sjcl.encrypt(newGroupKey, messagesArray[2][j]));
+
+        }
+        $.ajax({
+            type: 'POST',
+            url: 'JoinRequests.aspx/UpdateMessages',
+            async: false,
+            data: JSON.stringify({ mid: messagesArray[0], encMessage: messagesArray[1], encImage: messagesArray[2] }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function () {
+                window.location.href = "userHome.aspx";
             }
         });
     }

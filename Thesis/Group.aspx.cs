@@ -51,7 +51,7 @@ namespace Thesis
 
         protected void Button2_Click(object sender, EventArgs e)
         {
-            //Response.Redirect("userHome.aspx");
+            Response.Redirect("userHome.aspx");
         }
     }
 }
