@@ -23,8 +23,6 @@ namespace Thesis
             string check = HiddenField5.Value;      //Gets this value from javascript code
             if (check == "0")       
             {
-                Label1.Text = "Username or Password can not be left blank";
-                Label1.BackColor = System.Drawing.Color.Red;
                 Label1.Visible = true;
             }
             else        //If the username and password fields are non empty stores the values in database

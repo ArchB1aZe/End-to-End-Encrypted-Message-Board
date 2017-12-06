@@ -14,7 +14,13 @@ namespace Thesis
         public DataSet ds;
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            if (Session["id"] != null)
+            {
+                Session.Clear();
+                Label1.CssClass = "alert alert-success";
+                Label1.Text = "<strong>Success!</strong> You have successfully logged out";
+                Label1.Visible = true;
+            }
         }
         
         protected void Button1_Click(object sender, EventArgs e)
@@ -23,8 +29,8 @@ namespace Thesis
             string check = HiddenField4.Value;
             if (check == "0")
             {
-                Label1.Text = "Username or Password can not be left blank";
-                Label1.ForeColor = System.Drawing.Color.Red;
+                Label1.Text = "<strong>Warning!</strong> Username or Password can not be left blank";
+                Label1.CssClass = "alert alert-danger";
                 Label1.Visible = true;
             }
             else if(check == "1")
@@ -38,15 +44,11 @@ namespace Thesis
             }
             else
             {
-                Label1.Text = "Invalid Username or Password";
-                Label1.ForeColor = System.Drawing.Color.Red;
+                Label1.CssClass = "alert alert-danger";
+                Label1.Text = "<strong>Warning!</strong>Invalid Username or Password";
                 Label1.Visible = true;
             }
         }
 
-        protected void Button2_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("register.aspx");
-        }
     }
 }

@@ -49,15 +49,6 @@ namespace Thesis {
         protected global::System.Web.UI.WebControls.Button Button1;
         
         /// <summary>
-        /// Button2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
-        
-        /// <summary>
         /// HiddenField1 control.
         /// </summary>
         /// <remarks>
@@ -85,15 +76,6 @@ namespace Thesis {
         protected global::System.Web.UI.WebControls.HiddenField HiddenField3;
         
         /// <summary>
-        /// HiddenField5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenField5;
-        
-        /// <summary>
         /// HiddenField4 control.
         /// </summary>
         /// <remarks>
@@ -101,6 +83,15 @@ namespace Thesis {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HiddenField4;
+        
+        /// <summary>
+        /// HiddenField5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HiddenField5;
         
         /// <summary>
         /// Label1 control.

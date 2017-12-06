@@ -77,6 +77,7 @@
   <ItemGroup>
     <Content Include="create.aspx" />
     <Content Include="Group.aspx" />
+    <Content Include="img\logo.png" />
     <Content Include="Intermediate.aspx" />
     <Content Include="JoinRequests.aspx" />
     <Content Include="login.aspx" />

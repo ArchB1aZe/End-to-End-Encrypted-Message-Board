@@ -33,6 +33,7 @@
 <head runat="server">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta charset="utf-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"/>
     <title></title>
 </head>
 <script src="src/sjcl.js"></script>
@@ -101,24 +102,51 @@
        
     
 </script>
-<body>
+<body style="background-color:#eee; padding-top:60px">
     <form id="form1" runat="server">
-        <div>
-            Username:
-            <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
-            <br />
-            Password:
-            <asp:TextBox ID="TextBox2" runat="server" TextMode="Password"></asp:TextBox>
-            <br />
-            <asp:Button ID="Button1" runat="server" Text="Login" OnClick="Button1_Click" OnClientClick="check()"/>
-            <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Register" />
-            <asp:HiddenField ID="HiddenField1" runat="server" />
-            <asp:HiddenField ID="HiddenField2" runat="server" />
-            <asp:HiddenField ID="HiddenField3" runat="server" />
-            <asp:HiddenField ID="HiddenField5" runat="server" />
-            <asp:HiddenField ID="HiddenField4" runat="server" />
-            <br />
-            <asp:Label ID="Label1" runat="server" Text="Label" Visible="False"></asp:Label>
+        <nav class="navbar navbar-expand-sm fixed-top" style="background-color:#310ba1; height:60px;">
+            <a class="navbar-brand" href="about.aspx" style="padding-left:10%"><img src="img/logo.png" style=" width:70px; height:60px;" /></a>
+            <ul class="navbar-nav" style="padding-left:63%;">
+                <li class="nav-item">
+                  <a href="register.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" >Register</button></a>   
+                </li>
+                <li class="nav-item">
+                  <a href="about.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" >About</button></a> 
+                </li>
+                <li class="nav-item">
+                  <a href="contact.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy; color:#310ba1" >Contact</button></a> 
+                </li>
+            </ul>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row" style="padding-top:10%">
+                        <div class="col-sm-4">                            
+                        </div>
+                        <div class="col-sm-4" style="background-color:white; border-radius:25px;  padding-top:10px; padding-bottom:50px; padding-left:40px;">
+                            <h1 style=" padding-left:33%;">Login</h1>
+                            <h4>Username</h4>
+                            <asp:TextBox ID="TextBox1" runat="server" style="border-radius:5px"></asp:TextBox>                            
+                            <h4>Password</h4>
+                            <asp:TextBox ID="TextBox2" runat="server" TextMode="Password" style="border-radius:5px"></asp:TextBox>
+                            <br /><br />
+                            <asp:Button ID="Button1" CssClass="btn btn-dark" runat="server" Text="Login" OnClick="Button1_Click" OnClientClick="check()"/>
+                            <asp:HiddenField ID="HiddenField1" runat="server" />
+                            <asp:HiddenField ID="HiddenField2" runat="server" />
+                            <asp:HiddenField ID="HiddenField3" runat="server" />
+                            <asp:HiddenField ID="HiddenField4" runat="server" />
+                            <asp:HiddenField ID="HiddenField5" runat="server" />
+                            <br /><br />
+                            <asp:Label ID="Label1" CssClass="alert alert-danger" runat="server" Text="Label" Visible="False"><strong>Warning!</strong> Username or Password can not be left blank.</asp:Label>
+                        </div>
+                        <div class="col-sm-4">                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div> 
+            
 &nbsp;</div>
     </form>
 </body>

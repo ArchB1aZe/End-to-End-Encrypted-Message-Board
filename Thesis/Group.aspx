@@ -73,6 +73,7 @@
     <meta charset="utf-8"/>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"/>
 </head>
     <script src="src/sjcl.js"></script>
 <script type="text/javascript">
