@@ -153,45 +153,74 @@
         }
     }
 </script>
-<body>
+<body style="background-color:#eee; padding-top:60px">
     <form id="form1" runat="server">
-        <table id="t1">
-            <script type="text/javascript">
-                function DisplayMessages(messages) {
-                    var table = document.getElementById("t1");
-                    var row = table.insertRow(0);
-                    var head1 = row.insertCell(0);
-                    var head2 = row.insertCell(1);
-                    head1.outerHTML = "<th>Author</th>";
-                    head2.outerHTML = "<th>Message</th>";
-                    for (i = 0; i < messages[0].length; i++) {
-                        var row1 = table.insertRow(1);
-                        var row2 = table.insertRow(2);
-                        var cell1 = row1.insertCell(0);
-                        var cell2 = row1.insertCell(1);
-                        var cell3 = row2.insertCell(0);
-                        cell1.rowSpan = 2;
-                        var imga = decodeURIComponent(messages[2][i]); //Extracted image from database(in bytes)
-                        var srcString = "data:image / png;base64," + imga + "";
-                        var htmlString = '<img src="' + srcString + '"width="400" height="400">';
-                        cell1.innerHTML = messages[1][i];
-                        cell2.innerHTML = messages[0][i];
-                        if (imga != "random string") {
-                            cell3.innerHTML = htmlString;
-                        }
-                        
-                        
-                    }
-                }
-            </script>
-            <tr>
-                <td>
-                    <asp:Button ID="Button1" runat="server" Text="Write" OnClick="Button1_Click" /></td>
-                <td>
-                    <asp:Button ID="Button2" runat="server" Text="LeaveGroup" OnClientClick="RemoveUser()" OnClick="Button2_Click" /></td>
+         <nav class="navbar navbar-expand-sm fixed-top" style="background-color:#310ba1; height:60px;">
+            <a class="navbar-brand" href="about.aspx" style="padding-left:10%"><img src="img/logo.png" style=" width:70px; height:60px;" /></a>
+            <ul class="navbar-nav" style="padding-left:63%;">
+                <li class="nav-item">
+                  <a href="userHome.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" >Home</button></a>
+                </li>
+                <li class="nav-item">
+                  <a href="settings.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" >Settings</button></a> 
+                </li>
+                <li class="nav-item">
+                  <a href="login.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy; color:#310ba1" >Logout</button></a> 
+                </li>
+            </ul>
+        </nav>
+        <div class="container-fluid" style="background-color:white; height:140px;">
+            <h1 style="text-align:center; padding-top:45px; color:#310ba1"><%=this.gname %></h1>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <table id="t1" style="width:100%">
+                        <tr style="background-color:grey; width:100%">
+                            <th style="text-align:center; width:25%; border-right:1px solid darkgrey;">Author</th>
+                            <th style="text-align:center; width:75%">Message</th>
+                        </tr>
+                        <script type="text/javascript">
+                            function DisplayMessages(messages) {
+                                var table = document.getElementById("t1");
+                                for (i = 0; i < messages[0].length; i++) {
+                                    var row1 = table.insertRow(1);
+                                    var row2 = table.insertRow(2);
+                                    var cell1 = row1.insertCell(0);
+                                    var cell2 = row1.insertCell(1);
+                                    cell1.style.border = "1px solid grey";
+                                    cell2.style.border = "1px solid grey";
+                                    cell1.rowSpan = 2;
+                                    var imga = decodeURIComponent(messages[2][i]); //Extracted image from database(in bytes)
+                                    var srcString = "data:image / png;base64," + imga + "";
+                                    var htmlString = '<img src="' + srcString + '"width="400" height="400">';
+                                    cell1.innerHTML = messages[1][i];
+                                    cell2.innerHTML = messages[0][i];
+                                    if (imga != "random string") {
+                                        var cell3 = row2.insertCell(0);
+                                        cell3.innerHTML = htmlString;
+                                        cell3.style.border = "1px solid grey";
+                                        cell3.style.borderTop = "0px solid grey";
+                                        cell2.style.borderBottom = "0px solid grey";
+                                        cell3.style.textAlign = center;
+                                    }
+                                }
+                           }
+                        </script>
+                        <tr>
+                            <td>
+                                <asp:Button ID="Button1" runat="server" Text="Write" OnClick="Button1_Click" /></td>
+                            <td>
+                                <asp:Button ID="Button2" runat="server" Text="LeaveGroup" OnClientClick="RemoveUser()" OnClick="Button2_Click" /></td>
                 
-            </tr>
-        </table>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </div>
+        
         <asp:HiddenField ID="HiddenField1" runat="server" />
     </form>
 </body>
