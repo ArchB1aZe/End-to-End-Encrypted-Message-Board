@@ -40,12 +40,10 @@ namespace Thesis
                     if(ds2.Tables[0].Rows.Count == 0)
                     {
                         Label1.Text = "Sorry, You are not allowed to access this group!!!";
-                        Label1.BackColor = System.Drawing.Color.Red;
                     }
                     else
                     {
                         Label1.Text = "You have already sent the subscribe request to this group!!!";
-                        Label1.BackColor = System.Drawing.Color.Red;
                         Button2.Text = "Unsubscribe";
                         test = 1;
                     }
@@ -85,6 +83,11 @@ namespace Thesis
                 Response.Redirect("opengroups.aspx");
             }
             
+        }
+
+        protected void Button3_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("JoinRequests.aspx");
         }
     }
 }

@@ -40,6 +40,8 @@
         document.getElementById("HiddenField1").value = pKey;
         var sKey = pair.sec.get();
         sKey = sjcl.codec.base64.fromBits(sKey);        //Serialization of private key
+        console.log(pKey);
+        console.log(sKey);
         sKeyEncryption(sKey, pass, salt1);
     }
     function sKeyEncryption(sKey, pass, salt1) {          //To Encrypt the Private Key of the User

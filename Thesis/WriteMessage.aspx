@@ -107,9 +107,26 @@
         }
         
     </script>
-<body>
+<body style="background-color:#eee; padding-top:60px">
     <form id="form1" runat="server">
-        <div>
+         <nav class="navbar navbar-expand-sm fixed-top" style="background-color:#310ba1; height:60px;">
+            <a class="navbar-brand" href="about.aspx" style="padding-left:10%"><img src="img/logo.png" style=" width:70px; height:60px;" /></a>
+            <ul class="navbar-nav" style="padding-left:63%;">
+                <li class="nav-item">
+                  <asp:Button ID="Button3" runat="server" Text="Requests" OnClick="Button3_Click" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" />
+                </li>
+                <li class="nav-item">
+                  <a href="settings.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" >Settings</button></a> 
+                </li>
+                <li class="nav-item">
+                  <a href="login.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy; color:#310ba1" >Logout</button></a> 
+                </li>
+            </ul>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-5">
 
             <asp:TextBox ID="TextBox1" runat="server" Height="291px" TextMode="MultiLine" Width="601px"></asp:TextBox>
             <br />
@@ -123,6 +140,9 @@
             <asp:Button ID="Button1" runat="server" Text="Submit" OnClick="Button1_Click" />
             <br />
 
+                    </div>
+                <div class="col-sm-4"></div>
+            </div>
         </div>
     </form>
 </body>

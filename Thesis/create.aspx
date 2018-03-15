@@ -217,13 +217,32 @@
         
     </script>
 </head>
-<body>
+<body style="background-color:#eee; padding-top:60px">
     <form id="form1" runat="server">
-        <div>
-            Group Name: <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+        <nav class="navbar navbar-expand-sm fixed-top" style="background-color:#310ba1; height:60px;">
+            <a class="navbar-brand" href="about.aspx" style="padding-left:10%"><img src="img/logo.png" style=" width:70px; height:60px;" /></a>
+            <ul class="navbar-nav" style="padding-left:63%;">
+                <li class="nav-item">
+                  <asp:Button ID="Button3" runat="server" Text="Requests" OnClick="Button3_Click" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" />
+                </li>
+                <li class="nav-item">
+                  <a href="settings.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" >Settings</button></a> 
+                </li>
+                <li class="nav-item">
+                  <a href="login.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy; color:#310ba1" >Logout</button></a> 
+                </li>
+            </ul>
+        </nav>
+         <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    
+            <asp:Label ID="Label2" runat="server" Text="Group Name: " Width="120px"></asp:Label> <asp:TextBox ID="TextBox1" runat="server" OnTextChanged="TextBox1_TextChanged"></asp:TextBox>
             <br />
-            Add Members: <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox> 
+            <asp:Label ID="Label3" runat="server" Text="Add Members: " Width="120px"></asp:Label> <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox> 
             <br />
+                    
             Type:
             <asp:DropDownList ID="DropDownList1" runat="server">
                 <asp:ListItem>Open</asp:ListItem>
@@ -235,6 +254,9 @@
             <asp:Button ID="Button1" runat="server" Text="Create" OnClick="Button1_Click" OnClientClick="check()"/>
             <br />
             <asp:Label ID="Label1" runat="server" Text="Label" Visible="False"></asp:Label>
+        </div>
+                <div class="col-sm-4"></div>
+            </div>
         </div>
     </form>
 </body>

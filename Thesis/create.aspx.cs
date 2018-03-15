@@ -52,5 +52,15 @@ namespace Thesis
                 Response.Redirect("Group.aspx?groupName="+groupName+" ");
             }
         }
+
+        protected void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Button3_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("JoinRequests.aspx");
+        }
     }
 }

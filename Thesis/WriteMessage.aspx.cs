@@ -48,5 +48,10 @@ namespace Thesis
             }
             ClientScript.RegisterStartupScript(this.GetType(), "client click", "Check()", true);
         }
+
+        protected void Button3_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("JoinRequests.aspx");
+        }
     }
 }

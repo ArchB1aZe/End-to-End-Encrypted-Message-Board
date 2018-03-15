@@ -304,10 +304,27 @@
         });
     }
 </script>
-<body>
+<body style="background-color:#eee; padding-top:60px">
     <form id="form1" runat="server">
-        <div>
-            <table id="t1">
+        <nav class="navbar navbar-expand-sm fixed-top" style="background-color:#310ba1; height:60px;">
+            <a class="navbar-brand" href="about.aspx" style="padding-left:10%"><img src="img/logo.png" style=" width:70px; height:60px;" /></a>
+            <ul class="navbar-nav" style="padding-left:63%;">
+                <li class="nav-item">
+                  <asp:Button ID="Button3" runat="server" Text="Requests" OnClick="Button3_Click" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" />
+                </li>
+                <li class="nav-item">
+                  <a href="settings.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy;" >Settings</button></a> 
+                </li>
+                <li class="nav-item">
+                  <a href="login.aspx"><button type="button" class="btn-light" style="height:60px; border-width:0px; font-family:fantasy; color:#310ba1" >Logout</button></a> 
+                </li>
+            </ul>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+            <table id="t1" class="table table-striped table-hover">
                  <script type="text/javascript">
                      function DisplayData(namesArray, gidArray, uidArray) {
                          var table = document.getElementById("t1");
@@ -336,12 +353,15 @@
                          else {
                              var row = table.insertRow(0);
                              var head1 = row.insertCell(0);
-                             head1.outerHTML = "<th><h3 style='background-color: red'>You do not have any more pending requests.</h3></th>";
+                             head1.outerHTML = "<th><h3>You do not have any more pending requests.</h3></th>";
                          }
                         
                      }
                  </script>
             </table>
+        </div>
+                <div class="col-sm-4"></div>
+            </div>
         </div>
     </form>
 </body>
